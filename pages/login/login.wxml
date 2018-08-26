@@ -1,0 +1,9 @@
+<!--pages/login/login.wxml-->
+<view class="container">
+  <view class="userinfo">
+    <text>党员积分考核</text>
+    <input password type="text" placeholder="此问卷需密码才能访问" bindinput="passwordInput"/>
+    <button type="primary" bindtap="next">下一步</button>
+    <text>注意：学生和支部书记密码为学号，辅导员为工号</text>
+  </view>
+</view>
