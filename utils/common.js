@@ -8,6 +8,9 @@ var business = {
   }, 
   question : {
     list: server.url + '/question/query'
+  },
+  answer: {
+	save: server.url + '/answer/save' 
   }
 };
 

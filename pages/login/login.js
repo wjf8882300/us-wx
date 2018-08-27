@@ -9,21 +9,12 @@ Page({
    * 页面的初始数据
    */
   data: {
-    userInfo: {},
-    hasUserInfo: false,
-    password: ''
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    if (app.globalData.userInfo) {
-      this.setData({
-        userInfo: app.globalData.userInfo,
-        hasUserInfo: true
-      })
-    }
   },
 
   /**
@@ -89,7 +80,8 @@ Page({
       url: common.business.user.login,
       method: 'POST',
       data: {
-        password: value
+        password: value,
+        code: app.globalData.code
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -107,6 +99,9 @@ Page({
           return;
         }
 
+        // 存储token
+        app.globalData.token = res.data.data.token;
+        
         var userType = res.data.data.userType;
         if (userType == "0") {
           wx.navigateTo({
@@ -122,7 +117,6 @@ Page({
           });
         }
 
-        
       },
       fail: function(e) {
         wx.showToast({

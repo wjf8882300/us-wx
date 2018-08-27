@@ -3,10 +3,11 @@
     "pages/login/login",
     "pages/index/index",
     "pages/logs/logs",
-    
     "pages/question/leader/list",
     "pages/question/student/list",
-    "pages/question/teacher/list"
+    "pages/question/teacher/list",
+    "pages/result/result",
+    "pages/attachment/detail"
   ],
   "window": {
     "backgroundTextStyle": "light",
