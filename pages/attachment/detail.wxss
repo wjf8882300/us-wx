@@ -1,1 +1,7 @@
 /* pages/attachment/detail.wxss */
+.bntUpload {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  width: 20ch；
+}

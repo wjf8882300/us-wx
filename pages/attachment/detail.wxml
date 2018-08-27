@@ -1,4 +1,7 @@
 <!--pages/attachment/detail.wxml-->
 <text>上传证明文件</text>
-
-
+<image bindtap="uploadImage" src='../../images/timg.jpg' class="bntUpload"></image>
+<view class="list" wx:for="{{list}}" wx:key="{{list}}" wx:for-index="idx">      
+     <image src="{{item.attachementPath}}" id="{{idx}}" />
+   
+</view>

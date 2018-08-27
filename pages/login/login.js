@@ -101,6 +101,11 @@ Page({
 
         // 存储token
         app.globalData.token = res.data.data.token;
+
+        wx.navigateTo({
+          url: '../attachment/detail'
+        });
+        return;
         
         var userType = res.data.data.userType;
         if (userType == "0") {

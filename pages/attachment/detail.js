@@ -1,11 +1,14 @@
 // pages/attachment/detail.js
+const app = getApp();
+var common = require('../../utils/common.js');
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-  
+    list: []
   },
 
   /**
@@ -62,5 +65,36 @@ Page({
    */
   onShareAppMessage: function () {
   
+  },
+
+  uploadImage: function(e) {
+
+    var that = this;
+
+    wx.chooseImage({
+      success: function (res) {
+        var tempFilePaths = res.tempFilePaths;
+        wx.uploadFile({
+          url: common.business.attachement.uploadImage, 
+          filePath: tempFilePaths[0],
+          name: 'file',
+          formData: {
+            'token': app.globalData.token
+          },
+          success: function (res) {
+            var data = JSON.parse(res.data);
+            if(data.code == 200) {
+                var item = {
+                  attachementPath: common.server.staticUrl + "/" + data.data.attachementPath
+                };
+                that.data.list.push(item);
+                that.setData({
+                  list: that.data.list
+                });
+            }
+          }
+        })
+      }
+    })
   }
 })
