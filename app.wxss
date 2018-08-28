@@ -53,7 +53,7 @@ page{
     text-align: center;
     font-size:48rpx;
     font-weight:bold;
-    padding-top: 0;
+    padding-top: 50rpx;
 }
 
 .body {
