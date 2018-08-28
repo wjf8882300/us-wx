@@ -1,5 +1,5 @@
 /**app.wxss**/
-.container {
+/* .container {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -7,4 +7,38 @@
   justify-content: space-between;
   padding: 200rpx 0;
   box-sizing: border-box;
+}  */
+.container {
+  font-family:Microsoft YaHei;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 200rpx 0;
+  box-sizing: border-box;
+  background-color: #353C4C;
 } 
+::-webkit-scrollbar{
+  width: 0;
+  height: 0;
+  color: transparent;
+}
+
+/*白色字体  */
+.font-white{
+  color: #fff
+}
+/*背景图颜色  */
+page{
+  background-color:  #23262F; 
+  height: 100%;
+}
+
+/*浮动效果属性  */
+.flex-direction{
+  flex-direction: row
+}
+.flex-direction{
+  flex-direction: column;
+}

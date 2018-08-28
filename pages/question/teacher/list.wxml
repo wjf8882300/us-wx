@@ -1,2 +1,15 @@
 <!--pages/question/teacher/list.wxml-->
-<text>pages/question/teacher/list.wxml</text>
+<view class="container">
+  <view class="userinfo">
+    <text>党员积分制考核（指导员版）</text>
+    <view class="list" wx:for="{{questionList}}" wx:key="id" wx:for-index="idx" wx:for-item="qitem">      
+      <text>{{qitem.questionContent}}</text>
+      <view wx:for="{{studentList}}" wx:key="id" wx:for-item="sitem">
+          <text>{{sitem.userName}}</text>
+          <input id="{{idx}}#{{sitem.id}}" type="text" placeholder="请在此处填写积分" bindinput="bindKeyInput" />
+      </view>
+     </view>
+      
+     <button type="primary" bindtap="next">下一步</button>
+  </view>
+</view>

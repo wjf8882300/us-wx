@@ -9,12 +9,15 @@ var business = {
   user : {
     login: server.url + '/user/login',
     queryByTeamLeaderNo: server.url + '/user/queryByTeamLeaderNo',
+    queryByTeacherNo: server.url + '/user/queryByTeacherNo',
   }, 
   question : {
     list: server.url + '/question/query'
   },
   answer: {
-	  save: server.url + '/answer/save' 
+	  save: server.url + '/answer/save',
+    saveTeamLeader: server.url + '/answer/saveTeamLeader',
+    saveTeacher: server.url + '/answer/saveTeacher',
   },
   attachement: {
     uploadImage: server.url + '/attachement/upload'

@@ -39,8 +39,9 @@ Page({
 				}
 
 				if (res.data.data && res.data.data.questionList) {
+          that.localData.questionList = res.data.data.questionList;
 					that.setData({
-						list : res.data.data.questionList
+            list: that.localData.questionList
 					});
 				}
 
@@ -106,11 +107,34 @@ Page({
 
 	},
 
+  localData: {
+    questionList: [],
+    result: []
+  },
+
 	/**
 	 * 填写评分值
 	 */
 	bindKeyInput : function(e) {
 		var value = e.detail.value;
+    var result = this.localData.result;
+
+    // id结构为"题目索引"
+    var index = e.target.id;
+    var selectedItem = this.localData.questionList[index];
+    var score = selectedItem.questionScore;
+    var id = selectedItem.id;
+
+    if (value == '') {
+      for (var i = 0; i < result.length; i++) {
+        if (result[i].questionId == id
+          && result[i].destUserId == studentId) {
+          result.splice(i, 1);
+          break;
+        }
+      }
+      return;
+    }
 
 		// 判断用户输入的是否为数字
 		var regNum = new RegExp('[0-9]', 'g');
@@ -124,13 +148,6 @@ Page({
 			});
 			return;
 		}
-
-    var index = e.target.id;
-    var selectedItem = this.data.list[index];
-    var score = selectedItem.questionScore;
-    var id = selectedItem.id;
-
-    console.log(selectedItem);
 
 		// 判断填写的分值是否符合规则
 		if(value < 0) {
@@ -152,10 +169,10 @@ Page({
     }
 
 		var isFound = false;
-		for (var j = 0; j < this.data.result.length; j++) {
-			var item = this.data.result[j];
+		for (var j = 0; j < result.length; j++) {
+			var item = result[j];
 			if (item.questionId == id) {
-				this.data.result[j].answer = value;
+				result[j].answer = value;
 				isFound = true;
 				break;
 			}
@@ -167,7 +184,7 @@ Page({
 				answer : value
 			};
 
-			this.data.result.push(item);
+			result.push(item);
 		}
 	},
 
@@ -175,7 +192,8 @@ Page({
 	 * 提交记录
 	 */
 	next : function(e) {
-		if(this.data.result.length != this.data.list.length) {
+    var result = this.localData.result;
+    if (result.length != this.localData.questionList.length) {
 			wx.showToast({
 				title : '题目未全部答完，不允许提交',
 				icon : 'fail',
@@ -189,7 +207,7 @@ Page({
 			url : common.business.answer.save,
 			method : 'POST',
 			data : {
-        resultList: this.data.result,
+        resultList: result,
 				token: app.globalData.token
 			},
 			header : {
@@ -213,6 +231,10 @@ Page({
 					duration : 1000,
 					mask : true
 				});
+
+        wx.navigateTo({
+          url: '../../result/result'
+        });
 				
 			},
 			fail : function(e) {

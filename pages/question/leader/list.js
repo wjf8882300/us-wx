@@ -8,8 +8,7 @@ Page({
    */
   data: {
     questionList: [],
-    studentList:[],
-    result: []
+    studentList:[]
   },
 
   /**
@@ -91,7 +90,7 @@ Page({
         }
 
         if (res.data.data && res.data.data.questionList) {
-           that.leaderData.questionList = res.data.data.questionList;
+           that.localData.questionList = res.data.data.questionList;
         }
         
         // 查询学生
@@ -132,17 +131,15 @@ Page({
         }
 
         if (res.data.data) {
-          that.leaderData.studentList = res.data.data;
+          that.localData.studentList = res.data.data;
 
-          for (var i = 0; i < that.leaderData.questionList.length; i ++) {
-            that.leaderData.questionList[i].studentList = that.leaderData.studentList;
+          for (var i = 0; i < that.localData.questionList.length; i ++) {
+            that.localData.questionList[i].studentList = that.localData.studentList;
           }
 
-          console.log(that.leaderData.studentList);
-
           that.setData({
-            // questionList: that.leaderData.questionList,
-            studentList: that.leaderData.studentList
+            questionList: that.localData.questionList,
+            studentList: that.localData.studentList
           });
         }
       },
@@ -157,9 +154,10 @@ Page({
     });
   }, 
 
-  leaderData: {
+  localData: {
     questionList: [],
-    studentList:[]
+    studentList: [],
+    result: []
   },
 
  /**
@@ -167,6 +165,27 @@ Page({
  */
   bindKeyInput: function (e) {
     var value = e.detail.value;
+    var result = this.localData.result;
+
+    // id结构为"题目索引#学生ID"
+    var index = e.target.id;
+    var ids = index.split('#');
+    var questionPos = ids[0];
+    var studentId = ids[1];
+    var selectedItem = this.localData.questionList[questionPos];
+    var score = selectedItem.questionScore;
+    var id = selectedItem.id;
+
+    if(value == '') {
+      for (var i = 0; i < result.length; i ++) {
+        if (result[i].questionId == id 
+              && result[i].destUserId == studentId) {
+          result.splice(i, 1);
+          break;     
+        }
+      }
+      return;
+    }
 
     // 判断用户输入的是否为数字
     var regNum = new RegExp('[0-9]', 'g');
@@ -180,17 +199,6 @@ Page({
       });
       return;
     }
-
-    // id结构为"题目索引#学生ID"
-    var index = e.target.id;
-    var ids = index.split('#');
-    var questionPos = ids[0];
-    var studentId = ids[1];
-    var selectedItem = this.data.questionList[questionPos];
-    var score = selectedItem.questionScore;
-    var id = selectedItem.id;
-
-    console.log(selectedItem);
 
     // 判断填写的分值是否符合规则
     if (value < 0) {
@@ -211,16 +219,18 @@ Page({
       return;
     }
 
+    // 检查是否是修改已经提交的值，是则修改（通过questionId和destUserId判断）
     var isFound = false;
-    for (var j = 0; j < this.data.result.length; j++) {
-      var item = this.data.result[j];
+    for (var j = 0; j < result.length; j++) {
+      var item = result[j];
       if (item.questionId == id && item.destUserId == studentId ) {
-        this.data.result[j].answer = value;
+        result[j].answer = value;
         isFound = true;
         break;
       }
     }
 
+    // 新加数据放入数组
     if (!isFound) {
       var item = {
         questionPos: questionPos,
@@ -229,15 +239,35 @@ Page({
         answer: value
       };
 
-      this.data.result.push(item);
+      result.push(item);
     }
+
   },
 
 	/**
 	 * 提交记录
 	 */
   next: function (e) {
-    if (this.data.result.length != this.data.questionList.length) {
+
+    var result = this.localData.result;
+
+    // 统计答题情况
+    var list = [];
+    for (var i = 0; i < result.length; i++) {
+      var isFound = false;
+      for (var j = 0; j < list.length; j++) {
+        if (list[j].questionId == result[i].questionId) {
+          list[j].size += 1;
+          isFound = true;
+        }
+      }
+      if (!isFound) {
+        list.push({ questionPos: result[i].questionPos, questionId: result[i].questionId, size: 1 });
+      }
+    }
+
+    // 验证答题数跟题目数是否一致
+    if (list.length != this.localData.questionList.length) {
       wx.showToast({
         title: '题目未全部答完，不允许提交',
         icon: 'fail',
@@ -245,44 +275,26 @@ Page({
         mask: true
       });
       return;
-    } else {
-      var count = {
-        questionPos: '',
-        questionId: '',
-        size: 0
-      };
-      var list = [];
-      for (var i = 0; i < this.data.result.length; i++) {
-        var isFound = false;
-        for(var j = 0; j < list.length; j ++) {
-          if (list[j].questionId == this.data.result[i].questionId) {
-            list[j].size += 1;
-            isFound = true;
-          }
-        }
-        if (!isFound) {
-          list.push({ questionPos: this.data.result[i].questionPos, questionId: this.data.result[i].questionId, size:1});
-        }
-      }
+    }
 
-      for(var i = 0; i < list.length; i ++) {
-        if (list[i].size != this.leaderData.studentList.length) {
-          wx.showToast({
-            title: '第' + list[i].questionPos + '道题未填完',
-            icon: 'fail',
-            duration: 1000,
-            mask: true
-          });  
-          return;
-        }
+    // 检查是否给所有的学生都已评分
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].size != this.localData.studentList.length) {
+        wx.showToast({
+          title: '第' + (list[i].questionPos+1) + '道题未填完',
+          icon: 'fail',
+          duration: 1000,
+          mask: true
+        });
+        return;
       }
     }
 
     wx.request({
-      url: common.business.answer.save,
+      url: common.business.answer.saveTeamLeader,
       method: 'POST',
       data: {
-        resultList: this.data.result,
+        resultList: result,
         token: app.globalData.token
       },
       header: {
@@ -307,6 +319,9 @@ Page({
           mask: true
         });
 
+        wx.navigateTo({
+          url: '../../result/result'
+        });
       },
       fail: function (e) {
         wx.showToast({

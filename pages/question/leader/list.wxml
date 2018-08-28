@@ -2,15 +2,14 @@
 <view class="container">
   <view class="userinfo">
     <text>党员积分制考核（支部书记版）</text>
-    <!-- <view class="list" wx:for="{{questionList}}" wx:key="id" wx:for-index="idx" wx:for-item="qitem">      
+    <view class="list" wx:for="{{questionList}}" wx:key="id" wx:for-index="idx" wx:for-item="qitem">      
       <text>{{qitem.questionContent}}</text>
-      <text>{{qitem.studentlist}}</text>
-     
-     </view> -->
-      <view wx:for="{{studentlist}}" wx:key="id" wx:for-item="sitem" wx:for-index="idx">
+      <view wx:for="{{studentList}}" wx:key="id" wx:for-item="sitem">
           <text>{{sitem.userName}}</text>
-          <!-- <input id="{{idx}}#{{sitem.id}}" type="text" placeholder="请在此处填写积分" bindinput="bindKeyInput" /> -->
+          <input id="{{idx}}#{{sitem.id}}" type="text" placeholder="请在此处填写积分" bindinput="bindKeyInput" />
       </view>
+     </view>
+      
      <button type="primary" bindtap="next">下一步</button>
   </view>
 </view>

@@ -1,6 +1,49 @@
 /* pages/login/login.wxss */
-.userinfo {
+/* .userinfo {
   display: flex;
   flex-direction: column;
   align-items: center;
+} */
+
+.container{
+    height: 100%;
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    
+}
+
+.item{
+    height:100rpx;
+    width:90%;
+    border: 0px solid #fff;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.addition{
+  width: 96%;
+  margin: 0 auto;
+  height: 250rpx;
+  font-size: 24rpx;
+	line-height: 36rpx;
+	color: #ffffff;
+  background-color: #3f4554;
+	border-radius: 8px;
+  margin-bottom: 19rpx;
+}
+
+.addition1{
+  height: 32rpx;
+  padding: 15px 0 31rpx 29rpx;
+  font-size: 32rpx;
+}
+.addition2{
+  height: 32rpx;
+  line-height: 32rpx;
+  padding:0 0 30rpx 29rpx;
+  font-size: 24rpx;
 }
