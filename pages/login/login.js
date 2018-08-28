@@ -75,11 +75,13 @@ Page({
    */
   next: function(e) {
     var value = this.data.password;
+    var userType = this.localData.userType;
 
     wx.request({
       url: common.business.user.login,
       method: 'POST',
       data: {
+        userType: userType,
         password: value,
         code: app.globalData.code
       },
@@ -102,10 +104,10 @@ Page({
         // 存储token
         app.globalData.token = res.data.data.token;
 
-        wx.navigateTo({
-          url: '../attachment/detail'
-        });
-        return;
+        // wx.navigateTo({
+        //   url: '../attachment/detail'
+        // });
+        // return;
         
         var userType = res.data.data.userType;
         if (userType == "0") {
@@ -131,8 +133,14 @@ Page({
           mask: true
         });
       }
-    });
+    });    
+  },
 
-    
+  radioChange: function (e) {
+    this.localData.userType = e.detail.value;
+  },
+
+  localData: {
+    userType: '0'
   }
 })

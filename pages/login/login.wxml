@@ -2,6 +2,11 @@
 <view class="container">
   <view class="userinfo">
     <text>党员积分考核</text>
+    <radio-group class="radio-group" bindchange="radioChange">
+    <radio value="0" checked="true"/> 学生
+    <radio value="1" /> 支部书记
+    <radio value="2" /> 辅导员
+    </radio-group>
     <input password type="text" placeholder="此问卷需密码才能访问" bindinput="passwordInput"/>
     <button type="primary" bindtap="next">下一步</button>
     <text>注意：学生和支部书记密码为学号，辅导员为工号</text>
