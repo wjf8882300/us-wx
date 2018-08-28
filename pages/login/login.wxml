@@ -1,9 +1,10 @@
 <!--pages/login/login.wxml-->
 <view class="container">
-  <view class="item">
+  <view class="title">
     <text>党员积分考核</text>
    </view>
-   <view class="item">
+   <view class="body">
+  <view class="item">
     <radio-group class="radio-group" bindchange="radioChange">
     <radio value="0" checked="true"/> 学生
     <radio value="1" /> 支部书记
@@ -11,7 +12,7 @@
     </radio-group>
    </view>
    <view class="item">
-    <input password type="text" placeholder="此问卷需密码才能访问" bindinput="passwordInput"/>
+    <input password type="text" placeholder="清输入密码开始考核" bindinput="passwordInput"/>
    </view>
    <view class="item">
     <button type="primary" bindtap="next">下一步</button>
@@ -19,6 +20,8 @@
    <view class="addition">
     <view class="addition1"> <text>注意：</text></view>
     <view class="addition2"> <text>1.学生和支部书记密码为学号，辅导员为工号</text></view>
-    <view class="addition2"> <text>2.重复提交会覆盖上一次的结果</text>  </view>   
+    <view class="addition2"> <text>2.重复提交会覆盖上一次的结果</text>  </view>
+   </view>
+
   </view>
 </view>

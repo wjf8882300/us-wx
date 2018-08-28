@@ -1,7 +1,36 @@
 /* pages/attachment/detail.wxss */
-.bntUpload {
+/* .bntUpload {
   display: flex;
   flex-direction: column;
   align-items: left;
   width: 20ch；
+} */
+
+.container{
+    /* height: 100%; */
+    width:100%;
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    color: #fff;
+    padding: 20rpx;
+}
+
+.list {
+  display:flex;
+  flex-direction:row;
+  flex-wrap:wrap;
+  align-content:left;
+  justify-content:space-around;
+  height:70vh;
+}
+
+.list .area{
+  width:46vw;
+  text-align: left;
+}
+
+image {
+  width:46vw;
+  height: 46vw;
 }

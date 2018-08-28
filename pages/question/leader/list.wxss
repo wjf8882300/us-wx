@@ -1,1 +1,38 @@
 /* pages/question/leader/list.wxss */
+.container{
+    height: 100%;
+    width:100%;
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    color: #fff;
+}
+
+.list {
+    width:96%;
+    border: 0px solid #fff;
+    flex-direction: row;
+    justify-content: center;
+    margin: 0 auto;
+    margin-top: 50rpx;
+}
+
+.question {
+  font-size: 32rpx;
+}
+
+.answer {
+  display:flex;
+  flex-direction:row;
+  flex-wrap:wrap;
+  font-size: 32rpx;
+}
+
+.answer input {
+  margin-left: 10rpx;
+}
+
+.next {
+  width:96%;
+  margin: 50rpx auto;
+}

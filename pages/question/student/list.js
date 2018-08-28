@@ -17,6 +17,14 @@ Page({
 	 */
 	onLoad : function(options) {
 		var that = this;
+
+    wx.showToast({
+      title: '努力加载中...',
+      icon: 'loading',
+      duration: 10000,
+      mask: true
+    });
+
 		wx.request({
 			url : common.business.question.list,
 			method : 'POST',
@@ -27,11 +35,12 @@ Page({
 				'content-type' : 'application/json' // 默认值
 			},
 			success : function(res) {
-				if (res.data.code != 200) {
+        wx.hideToast();
+				if (res.data.code != 200) {        
 					wx.showToast({
 						title : res.data.message,
 						icon : 'fail',
-						duration : 1000,
+						duration : 1500,
 						mask : true
 					});
 
@@ -47,10 +56,11 @@ Page({
 
 			},
 			fail : function(e) {
+        wx.hideToast();
 				wx.showToast({
 					title : e,
 					icon : 'fail',
-					duration : 1000,
+					duration : 1500,
 					mask : true
 				});
 			}
@@ -143,7 +153,7 @@ Page({
 			wx.showToast({
 				title : '必须输入数字',
 				icon : 'fail',
-				duration : 1000,
+				duration : 1500,
 				mask : true
 			});
 			return;
@@ -154,7 +164,7 @@ Page({
 			wx.showToast({
 				title : '分值不能小于0',
 				icon : 'fail',
-				duration : 1000,
+				duration : 1500,
 				mask : true
 			});
 			return;
@@ -162,7 +172,7 @@ Page({
       wx.showToast({
         title: '分值不能大于' + score,
         icon: 'fail',
-        duration: 1000,
+        duration: 1500,
         mask: true
       });
       return;
@@ -192,60 +202,99 @@ Page({
 	 * 提交记录
 	 */
 	next : function(e) {
-    var result = this.localData.result;
+    var that = this;
+    var result = that.localData.result;
     if (result.length != this.localData.questionList.length) {
 			wx.showToast({
-				title : '题目未全部答完，不允许提交',
-				icon : 'fail',
-				duration : 1000,
+				title : '题目未全部答完',
+				icon : 'sucess',
+				duration : 1500,
 				mask : true
 			});
 			return;
 		}
-		
-		wx.request({
-			url : common.business.answer.save,
-			method : 'POST',
-			data : {
+
+    wx.showModal({
+      title: '提示',
+      content: '确认提交积分考核？',
+      success: function (res) {
+        if (res.confirm) {
+          that.submitAnswer();
+        }
+      }
+    });
+	}, 
+
+  /*
+   * 提交答案
+   */
+  submitAnswer: function() {
+
+    var result = this.localData.result;
+
+    wx.showToast({
+      title: '正在提交请稍后',
+      icon: 'loading',
+      duration: 10000
+    });
+
+    wx.request({
+      url: common.business.answer.save,
+      method: 'POST',
+      data: {
         resultList: result,
-				token: app.globalData.token
-			},
-			header : {
-				'content-type' : 'application/json' // 默认值
-			},
-			success : function(res) {
-				if (res.data.code != 200) {
-					wx.showToast({
-						title : res.data.message,
-						icon : 'fail',
-						duration : 1000,
-						mask : true
-					});
+        token: app.globalData.token
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success: function (res) {
+        wx.hideToast();
+        if (res.data.code != 200) {
+          if (res.data.code = common.errorcode.NOT_LOGIN) {
+            wx.showToast({
+              title: res.data.message,
+              icon: 'fail',
+              duration: 2500,
+              mask: true
+            });
+            wx.navigateTo({
+              url: '../../login/login'
+            });
+            return;
+          }
 
-					return;
-				}
+          wx.showToast({
+            title: res.data.message,
+            icon: 'fail',
+            duration: 1500,
+            mask: true
+          });
+          return;
+        }
 
-				wx.showToast({
-					title : '提交成功',
-					icon : 'success',
-					duration : 1000,
-					mask : true
-				});
+        wx.showToast({
+          title: '提交成功',
+          icon: 'success',
+          duration: 1500,
+          mask: true
+        });
 
         wx.navigateTo({
-          url: '../../result/result'
+          url: '../../attachment/detail'
         });
-				
-			},
-			fail : function(e) {
-				wx.showToast({
-					title : e,
-					icon : 'fail',
-					duration : 1000,
-					mask : true
-				});
-			}
-		});
-	}
+
+      },
+      fail: function (e) {
+        wx.hideToast();
+        wx.showToast({
+          title: e,
+          icon: 'fail',
+          duration: 1500,
+          mask: true
+        });
+      }
+    });
+  }
 
 })

@@ -1,18 +1,22 @@
 {
   "pages": [
     "pages/login/login",
-    "pages/index/index",
-    "pages/logs/logs",
+    "pages/attachment/detail",
+   
+    "pages/result/result",
     "pages/question/leader/list",
     "pages/question/student/list",
-    "pages/question/teacher/list",
-    "pages/result/result",
-    "pages/attachment/detail"
+    "pages/index/index",
+    "pages/logs/logs",
+    "pages/question/teacher/list" 
+    
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#fff",
+    "navigationBarBackgroundColor": "#2E323D",
     "navigationBarTitleText": "党员积分考核",
-    "navigationBarTextStyle": "black"
+    "backgroundColor": "#353C4C",
+    "enablePullDownRefresh": true,
+    "navigationBarTextStyle": "#000"
   }
 }

@@ -6,22 +6,24 @@
 } */
 
 .container{
-    height: 100%;
+    /* height: 100%; */
     width:100%;
     display: flex;
-    flex-direction: column;
     align-items: center;
     margin: 0 auto;
-    
+    color: #fff;
 }
 
 .item{
-    height:100rpx;
-    width:90%;
+    height:50rpx;
+    width:96%;
     border: 0px solid #fff;
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 50rpx;
 }
 
 .addition{
@@ -33,7 +35,7 @@
 	color: #ffffff;
   background-color: #3f4554;
 	border-radius: 8px;
-  margin-bottom: 19rpx;
+  margin-top: 100rpx;
 }
 
 .addition1{
@@ -45,5 +47,5 @@
   height: 32rpx;
   line-height: 32rpx;
   padding:0 0 30rpx 29rpx;
-  font-size: 24rpx;
+  font-size: 30rpx;
 }

@@ -77,6 +77,15 @@ Page({
     var value = this.data.password;
     var userType = this.localData.userType;
 
+    if (value == '') {
+      wx.showToast({
+        title: '密码不能为空',
+        icon: 'success',
+        duration: 1000,
+        mask: true
+      });
+    }
+
     wx.request({
       url: common.business.user.login,
       method: 'POST',
@@ -93,7 +102,7 @@ Page({
         if (res.data.code != 200) {
           wx.showToast({
             title: res.data.message,
-            icon: 'fail',
+            icon: 'success',
             duration: 1000,
             mask: true
           });

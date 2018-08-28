@@ -24,5 +24,10 @@ var business = {
   }
 };
 
+var errorcode = {
+  NOT_LOGIN: 9083015
+};
+
 module.exports.server = server;
 module.exports.business = business;
+module.exports.errorcode = errorcode;

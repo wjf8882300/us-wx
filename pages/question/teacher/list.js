@@ -67,6 +67,14 @@ Page({
   },
 
   queryQuestion: function (that) {
+
+    wx.showToast({
+      title: '努力加载中...',
+      icon: 'loading',
+      duration: 10000,
+      mask: true
+    });
+
     wx.request({
       url: common.business.question.list,
       method: 'POST',
@@ -78,6 +86,7 @@ Page({
       },
       success: function (res) {
         if (res.data.code != 200) {
+          wx.hideToast();
           wx.showToast({
             title: res.data.message,
             icon: 'fail',
@@ -97,6 +106,7 @@ Page({
 
       },
       fail: function (e) {
+        wx.hideToast();
         wx.showToast({
           title: e,
           icon: 'fail',
@@ -118,6 +128,7 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       success: function (res) {
+        wx.hideToast();
         if (res.data.code != 200) {
           wx.showToast({
             title: res.data.message,
@@ -145,6 +156,7 @@ Page({
         }
       },
       fail: function (e) {
+        wx.hideToast();
         wx.showToast({
           title: e,
           icon: 'fail',
@@ -249,6 +261,21 @@ Page({
 	 */
   next: function (e) {
 
+    var that = this;
+    wx.showModal({
+      title: '提示',
+      content: '确认提交积分考核？',
+      success: function (res) {
+        if (res.confirm) {
+          that.submitAnswer();
+        }
+      }
+    });
+
+    
+  },
+
+  submitAnswer: function() {
     var result = this.localData.result;
 
     // 统计答题情况
@@ -290,6 +317,12 @@ Page({
       }
     }
 
+    wx.showToast({
+      title: '正在提交请稍后',
+      icon: 'loading',
+      duration: 10000
+    });
+
     wx.request({
       url: common.business.answer.saveTeacher,
       method: 'POST',
@@ -301,6 +334,7 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       success: function (res) {
+        wx.hideToast();
         if (res.data.code != 200) {
           wx.showToast({
             title: res.data.message,

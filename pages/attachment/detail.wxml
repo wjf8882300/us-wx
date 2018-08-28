@@ -1,7 +1,14 @@
 <!--pages/attachment/detail.wxml-->
-<text>上传证明文件</text>
-<image bindtap="uploadImage" src='../../images/timg.jpg' class="bntUpload"></image>
-<view class="list" wx:for="{{list}}" wx:key="{{list}}" wx:for-index="idx">      
-     <image src="{{item.attachementPath}}" id="{{idx}}" />
-   
+<view class="container">
+<view class="title"><text>上传证明文件</text></view>
+<view class="body">
+<view class="list">
+<view class="area">
+<image bindtap="uploadImage" src='../../images/timg.jpg' mode="widthFix"></image>
+</view>
+<view class="area" wx:for="{{list}}" wx:for-index="idx"> 
+     <image mode="widthFix" src="{{item.attachementPath}}" id="{{idx}}" />
+</view>
+</view>
+</view>
 </view>

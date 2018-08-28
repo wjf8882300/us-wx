@@ -1,4 +1,5 @@
 // pages/result/result.js
+const app = getApp();
 Page({
 
   /**
@@ -62,5 +63,12 @@ Page({
    */
   onShareAppMessage: function () {
   
+  },
+
+  next: function() {
+    app.globalData.token = "";
+    wx.navigateTo({
+      url: '../login/login'
+    });
   }
 })
