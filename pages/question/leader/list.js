@@ -135,7 +135,7 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       success: function (res) {
-        wx.hideToast();
+        
         if (res.data.code != 200) {
           wx.showToast({
             title: res.data.message,
@@ -158,6 +158,8 @@ Page({
             studentList: that.localData.studentList
           });
         }
+
+        wx.hideToast();
       },
       fail: function (e) {
         wx.showToast({

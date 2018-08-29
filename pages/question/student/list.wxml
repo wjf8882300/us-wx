@@ -9,7 +9,7 @@
       <text>{{item.questionContent}}</text>
     </view>
     <view class="answer">    
-    <input id="{{idx}}" type="text" placeholder="请在此处填写积分" bindinput="bindKeyInput" />
+    <input id="{{idx}}" type="number" confirm-type="next" placeholder="请在此处填写积分" bindinput="bindKeyInput" />
     </view>
      </view>
      <view class="next">
