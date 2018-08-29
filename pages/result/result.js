@@ -66,7 +66,6 @@ Page({
   },
 
   next: function() {
-    app.globalData.token = "";
     wx.navigateTo({
       url: '../login/login'
     });

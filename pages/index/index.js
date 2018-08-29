@@ -1,10 +1,14 @@
 //index.js
 //获取应用实例
 const app = getApp()
+var md5Util = require('../../utils/md5.js');
+var des = require('../../utils/3des.js');
+var validator = require('../../utils/validator.js');
 
 Page({
   data: {
     motto: 'Hello World',
+    plain: '',
     userInfo: {},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo')
@@ -42,6 +46,10 @@ Page({
         }
       })
     }
+
+    this.setData({ motto: validator.checkPassword('123453#aadfd6') });
+    // this.setData({ motto: des.encrypt('abcsfs214567def', '12345678')});
+    // this.setData({ plain: des.decrypt(this.data.motto, '12345678') });
   },
   getUserInfo: function(e) {
     console.log(e)

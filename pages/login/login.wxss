@@ -49,3 +49,7 @@
   padding:0 0 30rpx 29rpx;
   font-size: 30rpx;
 }
+
+.message {
+  color: red;
+}

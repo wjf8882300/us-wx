@@ -13,6 +13,7 @@
    </view>
    <view class="item">
     <input password type="text" placeholder="此处输入密码开始考核" bindinput="passwordInput"/>
+    <view class="message">{{message}}</view>
    </view>
    <view class="item">
     <button type="primary" bindtap="next">下一步</button>

@@ -1,6 +1,9 @@
 // pages/question/teacher/list.js
 const app = getApp();
 var common = require('../../../utils/common.js');
+var crypt = require('../../../utils/crypt.js');
+var validator = require('../../../utils/validator.js');
+
 Page({
 
   /**
@@ -79,7 +82,7 @@ Page({
       url: common.business.question.list,
       method: 'POST',
       data: {
-        questionGroup: '2'
+        token: app.globalData.token
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -97,8 +100,11 @@ Page({
           return;
         }
 
-        if (res.data.data && res.data.data.questionList) {
-          that.localData.questionList = res.data.data.questionList;
+        if (res.data.data) {
+          var data = crypt.decrypt(res.data.data, app.globalData.token);
+          if (data) {
+            that.localData.questionList = data;
+          }
         }
 
         // 查询学生
@@ -119,7 +125,7 @@ Page({
 
   queryStudent: function (that) {
     wx.request({
-      url: common.business.user.queryByTeacherNo,
+      url: common.business.user.query,
       method: 'POST',
       data: {
         token: app.globalData.token
@@ -141,13 +147,11 @@ Page({
         }
 
         if (res.data.data) {
-          that.localData.studentList = res.data.data;
 
-          for (var i = 0; i < that.localData.questionList.length; i++) {
-            that.localData.questionList[i].studentList = that.localData.studentList;
+          var data = crypt.decrypt(res.data.data, app.globalData.token);
+          if (data) {
+            that.localData.studentList = data;
           }
-
-          console.log(that.localData.studentList);
 
           that.setData({
             questionList: that.localData.questionList,
@@ -267,6 +271,47 @@ Page({
       content: '确认提交积分考核？',
       success: function (res) {
         if (res.confirm) {
+          var result = that.localData.result;
+
+          // 统计答题情况
+          var list = [];
+          for (var i = 0; i < result.length; i++) {
+            var isFound = false;
+            for (var j = 0; j < list.length; j++) {
+              if (list[j].questionId == result[i].questionId) {
+                list[j].size += 1;
+                isFound = true;
+              }
+            }
+            if (!isFound) {
+              list.push({ questionPos: result[i].questionPos, questionId: result[i].questionId, size: 1 });
+            }
+          }
+
+          // 验证答题数跟题目数是否一致
+          if (list.length != that.localData.questionList.length) {
+            wx.showToast({
+              title: '题目未全部答完，不允许提交',
+              icon: 'fail',
+              duration: 1000,
+              mask: true
+            });
+            return;
+          }
+
+          // 检查是否给所有的学生都已评分
+          for (var i = 0; i < list.length; i++) {
+            if (list[i].size != that.localData.studentList.length) {
+              wx.showToast({
+                title: '第' + (list[i].questionPos + 1) + '道题未填完',
+                icon: 'fail',
+                duration: 1000,
+                mask: true
+              });
+              return;
+            }
+          }
+
           that.submitAnswer();
         }
       }
@@ -276,46 +321,7 @@ Page({
   },
 
   submitAnswer: function() {
-    var result = this.localData.result;
-
-    // 统计答题情况
-    var list = [];
-    for (var i = 0; i < result.length; i++) {
-      var isFound = false;
-      for (var j = 0; j < list.length; j++) {
-        if (list[j].questionId == result[i].questionId) {
-          list[j].size += 1;
-          isFound = true;
-        }
-      }
-      if (!isFound) {
-        list.push({ questionPos: result[i].questionPos, questionId: result[i].questionId, size: 1 });
-      }
-    }
-
-    // 验证答题数跟题目数是否一致
-    if (list.length != this.localData.questionList.length) {
-      wx.showToast({
-        title: '题目未全部答完，不允许提交',
-        icon: 'fail',
-        duration: 1000,
-        mask: true
-      });
-      return;
-    }
-
-    // 检查是否给所有的学生都已评分
-    for (var i = 0; i < list.length; i++) {
-      if (list[i].size != this.localData.studentList.length) {
-        wx.showToast({
-          title: '第' + (list[i].questionPos + 1) + '道题未填完',
-          icon: 'fail',
-          duration: 1000,
-          mask: true
-        });
-        return;
-      }
-    }
+    var result = crypt.encrypt(this.localData.result, app.globalData.token);
 
     wx.showToast({
       title: '正在提交请稍后',
@@ -324,10 +330,10 @@ Page({
     });
 
     wx.request({
-      url: common.business.answer.saveTeacher,
+      url: common.business.answer.saveTeam,
       method: 'POST',
       data: {
-        resultList: result,
+        result: result,
         token: app.globalData.token
       },
       header: {

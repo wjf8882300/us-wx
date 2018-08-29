@@ -1,6 +1,8 @@
 // pages/question/student/list.js
 const app = getApp();
 var common = require('../../../utils/common.js');
+var crypt = require('../../../utils/crypt.js');
+var validator = require('../../../utils/validator.js');
 
 Page({
 
@@ -29,14 +31,14 @@ Page({
 			url : common.business.question.list,
 			method : 'POST',
 			data : {
-				questionGroup : '0'
+        token: app.globalData.token
 			},
 			header : {
 				'content-type' : 'application/json' // 默认值
 			},
 			success : function(res) {
         wx.hideToast();
-				if (res.data.code != 200) {        
+        if (res.data.code != 200) {        
 					wx.showToast({
 						title : res.data.message,
 						icon : 'fail',
@@ -47,13 +49,15 @@ Page({
 					return;
 				}
 
-				if (res.data.data && res.data.data.questionList) {
-          that.localData.questionList = res.data.data.questionList;
-					that.setData({
-            list: that.localData.questionList
-					});
-				}
-
+        if (res.data.data) {
+          var data = crypt.decrypt(res.data.data, app.globalData.token);
+          if (data) {
+            that.localData.questionList = data;
+            that.setData({
+              list: that.localData.questionList
+            });
+          }
+        }				
 			},
 			fail : function(e) {
         wx.hideToast();
@@ -135,10 +139,10 @@ Page({
     var score = selectedItem.questionScore;
     var id = selectedItem.id;
 
+    // 值为空表示删除
     if (value == '') {
       for (var i = 0; i < result.length; i++) {
-        if (result[i].questionId == id
-          && result[i].destUserId == studentId) {
+        if (result[i].questionId == id) {
           result.splice(i, 1);
           break;
         }
@@ -230,7 +234,7 @@ Page({
    */
   submitAnswer: function() {
 
-    var result = this.localData.result;
+    var result = crypt.encrypt(this.localData.result, app.globalData.token);
 
     wx.showToast({
       title: '正在提交请稍后',
@@ -242,7 +246,7 @@ Page({
       url: common.business.answer.save,
       method: 'POST',
       data: {
-        resultList: result,
+        result: result,
         token: app.globalData.token
       },
       header: {

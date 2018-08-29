@@ -2,6 +2,10 @@
 
 const app = getApp();
 var common = require('../../utils/common.js');
+var md5Util = require('../../utils/md5.js');
+var desUtil = require('../../utils/3des.js');
+var validator = require('../../utils/validator.js');
+var base64 = require('../../utils/base64.js');
 
 Page({
 
@@ -9,6 +13,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    message: ''
   },
 
   /**
@@ -67,24 +72,45 @@ Page({
   },
 
   passwordInput: function(e) {
-    this.data.password = e.detail.value;
+    this.localData.password = e.detail.value;
+    this.checkPassword(this.localData.password);
+  },
+
+  checkPassword: function(value) {
+    if (value == '') {
+      this.setData({ message: '密码不能为空' });
+      return false;
+    }
+    else if (!validator.checkPassword(value)) {
+      this.setData({ message: '密码格式不正確，必须为字母或者数字' });
+      return false;
+    } else {
+      this.setData({ message: '' });
+      return true;
+    }
   },
 
   /**
    * 跳转到下一页
    */
   next: function(e) {
-    var value = this.data.password;
+    var value = this.localData.password;
     var userType = this.localData.userType;
 
-    if (value == '') {
+    if (!this.checkPassword(value)) {return;}
+
+    if (!app.globalData.token) {
       wx.showToast({
-        title: '密码不能为空',
+        title: '网络链接错误',
         icon: 'success',
         duration: 1000,
         mask: true
       });
+      return;
     }
+
+    value = md5Util.encrypt(value);
+    value = desUtil.encrypt(value, app.globalData.token);
 
     wx.request({
       url: common.business.user.login,
@@ -92,13 +118,12 @@ Page({
       data: {
         userType: userType,
         password: value,
-        code: app.globalData.code
+        token: app.globalData.token
       },
       header: {
         'content-type': 'application/json' // 默认值
       },
       success: function (res) {
-        console.log(res.data)
         if (res.data.code != 200) {
           wx.showToast({
             title: res.data.message,
@@ -110,14 +135,11 @@ Page({
           return;
         }
 
-        // 存储token
-        app.globalData.token = res.data.data.token;
-
         // wx.navigateTo({
         //   url: '../attachment/detail'
         // });
         // return;
-        
+
         var userType = res.data.data.userType;
         if (userType == "0") {
           wx.navigateTo({
@@ -132,7 +154,6 @@ Page({
             url: '../question/teacher/list'
           });
         }
-
       },
       fail: function(e) {
         wx.showToast({
@@ -150,6 +171,7 @@ Page({
   },
 
   localData: {
-    userType: '0'
+    userType: '0',
+    password: ''
   }
 })

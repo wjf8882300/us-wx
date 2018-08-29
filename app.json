@@ -1,12 +1,13 @@
 {
   "pages": [
+    
     "pages/login/login",
     "pages/attachment/detail",
-   
+   "pages/index/index",
     "pages/result/result",
     "pages/question/leader/list",
     "pages/question/student/list",
-    "pages/index/index",
+    
     "pages/logs/logs",
     "pages/question/teacher/list" 
     

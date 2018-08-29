@@ -1,4 +1,6 @@
 //app.js
+var common = require('utils/common.js');
+
 App({
   onLaunch: function () {
     // 展示本地存储能力
@@ -6,11 +8,45 @@ App({
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
 
+    var that = this;
     // 登录
     wx.login({
       success: res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
-    	  this.globalData.code = res.code;
+        wx.request({
+          url: common.business.user.apply,
+          method: 'POST',
+          data: {
+            code: res.code
+          },
+          header: {
+            'content-type': 'application/json' // 默认值
+          },
+          success: function (res) {
+            console.log(res.data)
+            if (res.data.code != 200) {
+              wx.showToast({
+                title: res.data.message,
+                icon: 'success',
+                duration: 1000,
+                mask: true
+              });
+
+              return;
+            }
+
+            // 存储token
+            that.globalData.token = res.data.data.token;
+          },
+          fail: function (e) {
+            wx.showToast({
+              title: '网络链接出错',
+              icon: 'fail',
+              duration: 1000,
+              mask: true
+            });
+          }
+        });  
       }
     })
     // 获取用户信息
@@ -36,7 +72,6 @@ App({
   },
   globalData: {
     userInfo: null,
-    code: '',
     token: ''
   }
 })

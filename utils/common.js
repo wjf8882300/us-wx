@@ -1,5 +1,5 @@
 var server = {
-  url: 'http://localhost/university',
+  url: 'http://localhost/university/wx',
   staticUrl: 'http://localhost/'
   /*url: 'https://boss.tongguxinxi.com/university',
   staticUrl: 'https://boss.tongguxinxi.com/'*/
@@ -7,17 +7,16 @@ var server = {
 
 var business = {
   user : {
+    apply: server.url + '/user/apply',
     login: server.url + '/user/login',
-    queryByTeamLeaderNo: server.url + '/user/queryByTeamLeaderNo',
-    queryByTeacherNo: server.url + '/user/queryByTeacherNo',
+    query: server.url + '/user/query'
   }, 
   question : {
     list: server.url + '/question/query'
   },
   answer: {
 	  save: server.url + '/answer/save',
-    saveTeamLeader: server.url + '/answer/saveTeamLeader',
-    saveTeacher: server.url + '/answer/saveTeacher',
+    saveTeam: server.url + '/answer/saveTeam'
   },
   attachement: {
     uploadImage: server.url + '/attachement/upload'
