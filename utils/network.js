@@ -1,3 +1,4 @@
+var common = require('common.js');
 function requestLoading(url, data, message, callback) {
   wx.showToast({
     title: message,
@@ -15,20 +16,30 @@ function requestLoading(url, data, message, callback) {
     },
     success: function (res) {
       if (res.data.code != 200) {
+        wx.hideToast();
+        if (res.data.code == common.errorcode.NOT_LOGIN) {
+          wx.showToast({
+            title: res.data.message,
+            icon: 'fail',
+            duration: 2500,
+            mask: true
+          });
+          wx.navigateTo({
+            url: '../pages/login/login'
+          });
+          return;
+        }
+        
         wx.showToast({
           title: res.data.message,
           icon: 'fail',
           duration: 1500,
           mask: true
         });
-
         return;
       }
-
-      if (res.data.data) {
-        callback(res.data.data);
-      }
-
+      
+      callback(res.data.data);
       wx.hideToast();
     },
     fail: function (e) {

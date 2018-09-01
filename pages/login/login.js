@@ -6,6 +6,7 @@ var md5Util = require('../../utils/md5.js');
 var desUtil = require('../../utils/3des.js');
 var validator = require('../../utils/validator.js');
 var base64 = require('../../utils/base64.js');
+var network = require('../../utils/network.js');
 
 Page({
 
@@ -112,35 +113,14 @@ Page({
     value = md5Util.encrypt(value);
     value = desUtil.encrypt(value, app.globalData.token);
 
-    wx.request({
-      url: common.business.user.login,
-      method: 'POST',
-      data: {
+    network.requestLoading(common.business.user.login, 
+      {
         userType: userType,
         password: value,
         token: app.globalData.token
       },
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      success: function (res) {
-        if (res.data.code != 200) {
-          wx.showToast({
-            title: res.data.message,
-            icon: 'success',
-            duration: 1000,
-            mask: true
-          });
-
-          return;
-        }
-
-        // wx.navigateTo({
-        //   url: '../attachment/detail'
-        // });
-        // return;
-
-        var userType = res.data.data.userType;
+      '努力登录中...',
+      function(res) {
         if (userType == "0") {
           wx.navigateTo({
             url: '../question/student/list'
@@ -154,16 +134,9 @@ Page({
             url: '../question/teacher/list'
           });
         }
-      },
-      fail: function(e) {
-        wx.showToast({
-          title: e,
-          icon: 'fail',
-          duration: 1000,
-          mask: true
-        });
       }
-    });    
+    );
+ 
   },
 
   radioChange: function (e) {

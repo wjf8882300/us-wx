@@ -20,7 +20,7 @@ Page({
 	 */
 	onLoad : function(options) {
     this.localData.questionList = [];
-		this.queryQuestion('努力加载中');
+		this.queryQuestion('努力加载试题中');
 	},
 
 	/**
@@ -57,7 +57,7 @@ Page({
 	onPullDownRefresh : function() {
     this.localData.start = 1;
     this.localData.questionList = [];
-    this.queryQuestion('努力加载中');
+    this.queryQuestion('努力加载试题中');
 	},
 
 	/**
@@ -99,8 +99,8 @@ Page({
       },
       message,
       function (res) {
-        var data = crypt.decrypt(res, app.globalData.token);
-        console.log(data);
+        if(!res) {return;}
+        var data = crypt.decrypt(res, app.globalData.token, app.globalData.algorithm);
         if (data.list) {
           if (that.localData.start < data.pages) {
             that.localData.start += 1;
@@ -111,7 +111,6 @@ Page({
 
           that.localData.questionList = that.localData.questionList.concat(data.list);
 
-          console.log(that.localData.questionList);
           that.setData({
             list: that.localData.questionList
           });
@@ -123,76 +122,32 @@ Page({
 	 * 填写评分值
 	 */
 	bindKeyInput : function(e) {
-		var value = e.detail.value;
     var result = this.localData.result;
 
     // id结构为"题目索引"
-    var index = e.target.id;
-    var selectedItem = this.localData.questionList[index];
+    var selectedItem = this.localData.questionList[e.target.id];
     var score = selectedItem.questionScore;
     var id = selectedItem.id;
+    var item = {
+      questionId: id,
+      answer: e.detail.value
+    };
 
     // 值为空表示删除
-    if (value == '') {
-      for (var i = 0; i < result.length; i++) {
-        if (result[i].questionId == id) {
-          result.splice(i, 1);
-          break;
-        }
-      }
+    if (item.answer == '') {
+      validator.remove(result, item, function (a, b) { return a.questionId == b.questionId;});
       return;
     }
 
 		// 判断用户输入的是否为数字
-		var regNum = new RegExp('[0-9]', 'g');
-		var rsNum = regNum.exec(value);
-		if(!rsNum) {
-			wx.showToast({
-				title : '必须输入数字',
-				icon : 'fail',
-				duration : 1500,
-				mask : true
-			});
-			return;
-		}
+    if (!validator.isDigest(item.answer)) {return;}
 
 		// 判断填写的分值是否符合规则
-		if(value < 0) {
-			wx.showToast({
-				title : '分值不能小于0',
-				icon : 'fail',
-				duration : 1500,
-				mask : true
-			});
-			return;
-    } else if (value > score) {
-      wx.showToast({
-        title: '分值不能大于' + score,
-        icon: 'fail',
-        duration: 1500,
-        mask: true
-      });
-      return;
-    }
+    if (!validator.scoreRange(item.answer, 0, score)) { return; }
 
-		var isFound = false;
-		for (var j = 0; j < result.length; j++) {
-			var item = result[j];
-			if (item.questionId == id) {
-				result[j].answer = value;
-				isFound = true;
-				break;
-			}
-		}
-
-		if (!isFound) {
-			var item = {
-				questionId : id,
-				answer : value
-			};
-
-			result.push(item);
-		}
+    // 像数组新增项，若id已经存在则更新
+    validator.merge(result, item, 
+      function (a, b) { return a.questionId == b.questionId; }, function (a, b) { a.answer = b.answer;});
 	},
 
 	/**
@@ -226,72 +181,27 @@ Page({
    * 提交答案
    */
   submitAnswer: function() {
+    var result = crypt.encrypt(this.localData.result, app.globalData.token, app.globalData.algorithm);
 
-    var result = crypt.encrypt(this.localData.result, app.globalData.token);
-
-    wx.showToast({
-      title: '正在提交请稍后',
-      icon: 'loading',
-      duration: 10000
-    });
-
-    wx.request({
-      url: common.business.answer.save,
-      method: 'POST',
-      data: {
+    network.requestLoading(
+      common.business.answer.save, 
+      {
         result: result,
         token: app.globalData.token
       },
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      success: function (res) {
-        wx.hideToast();
-        if (res.data.code != 200) {
-          if (res.data.code = common.errorcode.NOT_LOGIN) {
-            wx.showToast({
-              title: res.data.message,
-              icon: 'fail',
-              duration: 2500,
-              mask: true
-            });
-            wx.navigateTo({
-              url: '../../login/login'
-            });
-            return;
-          }
-
-          wx.showToast({
-            title: res.data.message,
-            icon: 'fail',
-            duration: 1500,
-            mask: true
-          });
-          return;
-        }
-
+      '正在提交请稍后',
+      function(res) {
         wx.showToast({
           title: '提交成功',
           icon: 'success',
-          duration: 1500,
+          duration: 1000,
           mask: true
         });
-
         wx.navigateTo({
           url: '../../attachment/detail'
         });
-
-      },
-      fail: function (e) {
-        wx.hideToast();
-        wx.showToast({
-          title: e,
-          icon: 'fail',
-          duration: 1500,
-          mask: true
-        });
       }
-    });
+    );
   }
 
 })

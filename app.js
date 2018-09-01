@@ -37,6 +37,7 @@ App({
 
             // 存储token
             that.globalData.token = res.data.data.token;
+            that.globalData.algorithm = res.data.data.algorithm;
           },
           fail: function (e) {
             wx.showToast({
@@ -72,6 +73,7 @@ App({
   },
   globalData: {
     userInfo: null,
-    token: ''
+    token: '',
+    algorithm: 0
   }
 })
