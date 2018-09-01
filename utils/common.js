@@ -1,8 +1,8 @@
 var server = {
-  // url: 'http://localhost/university/wx',
-  // staticUrl: 'http://localhost/'
-  url: 'https://boss.tongguxinxi.com/university/wx',
-  staticUrl: 'https://boss.tongguxinxi.com/'
+  url: 'http://localhost/university/wx',
+  staticUrl: 'http://localhost/'
+  // url: 'https://boss.tongguxinxi.com/university/wx',
+  // staticUrl: 'https://boss.tongguxinxi.com/'
 }
 
 var business = {

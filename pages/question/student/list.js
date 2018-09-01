@@ -3,6 +3,7 @@ const app = getApp();
 var common = require('../../../utils/common.js');
 var crypt = require('../../../utils/crypt.js');
 var validator = require('../../../utils/validator.js');
+var network = require('../../../utils/network.js');
 
 Page({
 
@@ -18,59 +19,8 @@ Page({
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad : function(options) {
-		var that = this;
-
-    wx.showToast({
-      title: '努力加载中...',
-      icon: 'loading',
-      duration: 10000,
-      mask: true
-    });
-
-		wx.request({
-			url : common.business.question.list,
-			method : 'POST',
-			data : {
-        token: app.globalData.token
-			},
-			header : {
-				'content-type' : 'application/json' // 默认值
-			},
-			success : function(res) {
-        if (res.data.code != 200) {        
-					wx.showToast({
-						title : res.data.message,
-						icon : 'fail',
-						duration : 1500,
-						mask : true
-					});
-
-					return;
-				}
-
-        if (res.data.data) {
-          var data = crypt.decrypt(res.data.data, app.globalData.token);
-          if (data) {
-            that.localData.questionList = data;
-            that.setData({
-              list: that.localData.questionList
-            });
-          }
-        }	
-
-        wx.hideToast();			
-			},
-			fail : function(e) {
-        wx.hideToast();
-				wx.showToast({
-					title : e,
-					icon : 'fail',
-					duration : 1500,
-					mask : true
-				});
-			}
-		});
-
+    this.localData.questionList = [];
+		this.queryQuestion('努力加载中');
 	},
 
 	/**
@@ -105,14 +55,18 @@ Page({
 	 * 页面相关事件处理函数--监听用户下拉动作
 	 */
 	onPullDownRefresh : function() {
-
+    this.localData.start = 1;
+    this.localData.questionList = [];
+    this.queryQuestion('努力加载中');
 	},
 
 	/**
 	 * 页面上拉触底事件的处理函数
 	 */
 	onReachBottom : function() {
-
+      if(this.localData.hasMoreData) {
+        this.queryQuestion('加载更多数据');
+      } 
 	},
 
 	/**
@@ -124,7 +78,45 @@ Page({
 
   localData: {
     questionList: [],
-    result: []
+    result: [],
+    start: 1,
+    length: 10,
+    hasMoreData: true
+  },
+
+  /* 
+   * 查询问题
+   */
+  queryQuestion: function(message) {
+    var that = this;
+
+    network.requestLoading(
+      common.business.question.list,
+      {
+        start: that.localData.start,
+        length: that.localData.length,
+        token: app.globalData.token
+      },
+      message,
+      function (res) {
+        var data = crypt.decrypt(res, app.globalData.token);
+        console.log(data);
+        if (data.list) {
+          if (that.localData.start < data.pages) {
+            that.localData.start += 1;
+            that.localData.hasMoreData = true;           
+          } else {
+            that.localData.hasMoreData = false;  
+          }
+
+          that.localData.questionList = that.localData.questionList.concat(data.list);
+
+          console.log(that.localData.questionList);
+          that.setData({
+            list: that.localData.questionList
+          });
+        }
+      });
   },
 
 	/**
