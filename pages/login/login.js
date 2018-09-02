@@ -121,6 +121,12 @@ Page({
       },
       '努力登录中...',
       function(res) {
+
+        // wx.navigateTo({
+        //   url: '../attachment/detail'
+        // });
+        // return;
+
         if (userType == "0") {
           wx.navigateTo({
             url: '../question/student/list'

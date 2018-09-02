@@ -2,13 +2,19 @@
 <view class="container">
 <view class="title"><text>上传证明文件</text></view>
 <view class="body">
-<view class="list">
-<view class="area">
-<image bindtap="uploadImage" src='../../images/timg.jpg' mode="widthFix"></image>
-</view>
-<view class="area" wx:for="{{list}}" wx:for-index="idx"> 
-     <image mode="widthFix" src="{{item.attachementPath}}" id="{{idx}}" />
-</view>
-</view>
+  <view class="list">
+    <view class="area">
+      <image bindtap="chooseImage" src='../../images/timg2.png' mode="widthFix" class="bntUpload"></image>
+    </view>
+    <view class="area" wx:for="{{list}}" wx:for-index="idx" wx:key="item" > 
+        <image mode="widthFix" src="{{item.attachementPath}}" id="{{idx}}" style="opacity:{{item.imgOpacity}}" bindtap="preview" bindlongpress="deleteImgage" data-list="{{item.attachementPath}}" data-src="{{item.attachementPath}}" bindtouchstart="touchStart" bindtouchend="touchEnd"/>     
+    </view>
+    <view class="area">
+      <image mode="widthFix"></image>
+    </view>     
+  </view>
+  <view>
+    <button class="next" type="primary" bindtap="next">下一步</button>
+  </view>
 </view>
 </view>

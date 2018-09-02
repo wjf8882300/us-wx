@@ -73,10 +73,20 @@ function merge(result, item, compare, callback) {
   }
 }
 
+function match(result, item, compare, callback) {
+  for (var i = 0; i < result.length; i++) {
+    if (compare(result[i], item)) {
+      callback(result[i], item);
+      break;
+    }
+  }
+}
+
 module.exports = {
   checkPassword: checkPassWord,
   isDigest: isDigest,
   scoreRange: scoreRange,
   remove: remove,
-  merge: merge
+  merge: merge,
+  match: match
 }  

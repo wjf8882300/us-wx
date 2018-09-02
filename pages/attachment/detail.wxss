@@ -1,10 +1,9 @@
 /* pages/attachment/detail.wxss */
-/* .bntUpload {
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-  width: 20ch；
-} */
+.bntUpload {
+  width:36vw;
+  height: 36vw;
+  margin-left:5vw;
+} 
 
 .container{
     /* height: 100%; */
@@ -17,20 +16,28 @@
 }
 
 .list {
+  width: 100%;
   display:flex;
   flex-direction:row;
   flex-wrap:wrap;
   align-content:left;
   justify-content:space-around;
-  height:70vh;
+  text-align: left;
 }
 
 .list .area{
+  margin: 2px auto;
+  display:flex; 
   width:46vw;
-  text-align: left;
+  align-content:center;
 }
 
 image {
   width:46vw;
   height: 46vw;
+}
+
+.next {
+  width:96%;
+  margin: 50rpx auto;
 }
