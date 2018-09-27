@@ -1,0 +1,8 @@
+<!--pages/result/result.wxml-->
+<view class="container">
+<view class="body">
+<text>恭喜，您已经完成考核！</text>
+<button class="next" type="primary" bindtap="next">完成</button>
+</view>
+</view>
+

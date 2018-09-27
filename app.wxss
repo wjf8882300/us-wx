@@ -1,0 +1,66 @@
+/**app.wxss**/
+/* .container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 200rpx 0;
+  box-sizing: border-box;
+}  */
+.container {
+  font-family:Microsoft YaHei;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 0; 
+  box-sizing: border-box;
+  background-color:  #353C4C;
+} 
+::-webkit-scrollbar{
+  width: 0;
+  height: 0;
+  color: transparent;
+}
+
+/*白色字体  */
+.font-white{
+  color: #fff
+}
+/*背景图颜色  */
+page{
+  background-color:  #353C4C;
+  height: 100%;
+}
+
+/*浮动效果属性  */
+.flex-direction{
+  flex-direction: row
+}
+.flex-direction{
+  flex-direction: column;
+}
+
+.title {
+    height:10%;
+    width:100%;
+    border: 0px solid #fff;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size:48rpx;
+    font-weight:bold;
+    padding-top: 50rpx;
+}
+
+.body {
+  height:90%;
+  width:100%;
+  /* margin: 0rpx 20rpx 0rpx 20rpx; */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

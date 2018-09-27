@@ -1,0 +1,24 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/attachment/detail",
+    
+    
+   "pages/index/index",
+    "pages/result/result",
+    "pages/question/leader/list",
+    "pages/question/student/list",
+    
+    "pages/logs/logs",
+    "pages/question/teacher/list" 
+    
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#2E323D",
+    "navigationBarTitleText": "党员积分制考核",
+    "backgroundColor": "#353C4C",
+    "enablePullDownRefresh": true,
+    "navigationBarTextStyle": "#000"
+  }
+}

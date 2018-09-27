@@ -1,0 +1,31 @@
+/* pages/question/student/list.wxss */
+.container{
+    height: 100%;
+    width:100%;
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    color: #fff;
+}
+
+.list {
+    width:96%;
+    border: 0px solid #fff;
+    flex-direction: row;
+    justify-content: center;
+    margin: 0 auto;
+    margin-top: 50rpx;
+}
+
+.question {
+  font-size: 32rpx;
+}
+
+.answer {
+  font-size: 32rpx;
+}
+
+.next {
+  width:96%;
+  margin: 50rpx auto;
+}

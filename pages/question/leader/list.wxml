@@ -1,0 +1,18 @@
+<!--pages/question/leader/list.wxml-->
+<view class="container">
+  <view class="title">
+    <text>党员积分制考核（支部书记版）</text>
+  </view>
+  <view class="body">
+    <view class="list" wx:for="{{questionList}}" wx:key="id" wx:for-index="idx" wx:for-item="qitem">      
+      <view class="question"><text>{{qitem.questionContent}}</text></view>
+      <view class="answer" wx:for="{{studentList}}" wx:key="id" wx:for-item="sitem">
+          <text>{{sitem.userName}}</text>
+          <input id="{{idx}}#{{sitem.id}}" type="number" confirm-type="next" placeholder="请在此处填写积分" bindinput="bindKeyInput" />
+      </view>
+     </view>
+     <view class="next"> 
+     <button type="primary" bindtap="next">下一步</button>
+     </view>
+  </view>
+</view>

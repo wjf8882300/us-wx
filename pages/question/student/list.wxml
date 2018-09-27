@@ -1,0 +1,19 @@
+<!--pages/question/student/list.wxml-->
+<view class="container">
+  <view class="title">
+    <text>党员积分制考核（学生党员版）</text>
+  </view>
+  <view class="body">
+    <view class="list" wx:for="{{list}}" wx:key="{{list}}" wx:for-index="idx">  
+    <view class="question">    
+      <text>{{item.questionContent}}</text>
+    </view>
+    <view class="answer">    
+    <input id="{{idx}}" type="number" confirm-type="next" placeholder="请在此处填写积分" bindinput="bindKeyInput" />
+    </view>
+     </view>
+     <view class="next">
+      <button type="primary" bindtap="next">下一步</button>
+    </view>
+  </view>
+</view>
