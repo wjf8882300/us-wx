@@ -1,7 +1,7 @@
 <!--pages/login/login.wxml-->
 <view class="container">
   <view class="title">
-    <text>党员积分考核</text>
+    <text>党员积分制考核</text>
    </view>
    <view class="body">
   <view class="item">

@@ -16,7 +16,7 @@
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#2E323D",
-    "navigationBarTitleText": "党员积分考核",
+    "navigationBarTitleText": "党员积分制考核",
     "backgroundColor": "#353C4C",
     "enablePullDownRefresh": true,
     "navigationBarTextStyle": "#000"
