@@ -1,7 +1,7 @@
 <!--pages/question/teacher/list.wxml-->
 <view class="container">
   <view class="title">
-    <text>党员积分制考核（指导员版）</text>
+    <text>党员积分制考核（辅导员版）</text>
   </view>
   <view class="body">
     <view class="list" wx:for="{{questionList}}" wx:key="id" wx:for-index="idx" wx:for-item="qitem">      
